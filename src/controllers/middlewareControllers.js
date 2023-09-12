@@ -15,6 +15,7 @@ const middlewareControllers = {
           res.status(403).json({ EC: -2, data: "Token is not valid" });
         }
         req.user = user;
+        console.log("user>>> ", user);
         next();
       });
     } else {

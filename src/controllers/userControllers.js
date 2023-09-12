@@ -4,8 +4,9 @@ const bcrypt = require("bcrypt");
 const userController = {
   //GET ALL USERS
   getAllUsers: async (req, res) => {
+    console.log("req.user>>>", req.user);
     try {
-      const user = await User.find();
+      const user = await User.findOne({ ac });
       res.status(200).json({
         EC: 0,
         data: user,

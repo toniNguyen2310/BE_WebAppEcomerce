@@ -39,7 +39,7 @@ const authController = {
   //GENERATE ACCESS TOKEN
   generateAccessToken: (user) => {
     return jwt.sign({ id: user.id, admin: user.admin }, keyAccessToken, {
-      expiresIn: "20s",
+      expiresIn: "300d",
     });
   },
 
@@ -59,7 +59,7 @@ const authController = {
       if (!user) {
         return res.status(404).json({
           EC: -1,
-          data: "Wrong email",
+          data: "Thông tin đăng nhập không đúng",
         });
       }
 
@@ -72,7 +72,7 @@ const authController = {
       if (!validatePassword) {
         return res.status(404).json({
           EC: -1,
-          data: "Wrong password",
+          data: "Thông tin đăng nhập không đúng",
         });
       }
 
@@ -91,9 +91,11 @@ const authController = {
 
         //Loaị bỏ password khi login
         const { password, ...others } = user._doc;
+
+        const userWP = { ...others };
         res.status(200).json({
           EC: 0,
-          data: { ...others, accessToken },
+          data: { userWP, accessToken },
         });
       }
     } catch (error) {
@@ -128,7 +130,7 @@ const authController = {
       }
 
       //Lọc refresh token cũ ra khỏi db
-      refreshTokens.filter((token) => token !== refreshToken);
+      refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
 
       //Create new access token and refresh token
       const newAccessToken = authController.generateAccessToken(user);
@@ -146,21 +148,37 @@ const authController = {
 
       res.status(200).json({
         EC: 0,
-        data: { EC: 0, data: newAccessToken },
+        data: { EC: 0, data: newAccessToken, newRefreshToken },
       });
     });
   },
 
   //LOGOUT
   logoutUser: async (req, res) => {
-    res.clearCookie("refreshToken");
     refreshTokens = refreshTokens.filter(
       (token) => token !== req.headers.cookie.split("=")[1]
     );
+    res.clearCookie("refreshToken");
     return res.status(200).json({
       EC: 0,
       data: { EC: 0, data: "Logout successfully" },
     });
+  },
+
+  //FETCH ACCOUNT
+  fetchAccount: async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id);
+      res.status(200).json({
+        EC: 0,
+        data: user,
+      });
+    } catch (error) {
+      res.status(500).json({
+        EC: -2,
+        data: error,
+      });
+    }
   },
 };
 

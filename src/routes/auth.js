@@ -18,4 +18,11 @@ authRouter.post(
   authController.logoutUser
 );
 
+//LOGIN
+authRouter.get(
+  "/account",
+  middlewareControllers.verifyToken,
+  authController.fetchAccount
+);
+
 module.exports = authRouter;

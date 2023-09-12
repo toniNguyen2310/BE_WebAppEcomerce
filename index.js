@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 
 //Khai báo routes khi vercel
 app.get("/", (req, res) => {
-  res.send("Hello World! && nodemon2");
+  res.send("Hello, This is my Project");
 });
 
 //ROUTES

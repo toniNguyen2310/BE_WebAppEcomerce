@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const keyAccessToken = process.env.JWT_ACCESS_KEY;
 const keyRefreshToken = process.env.JWT_REFRESH_KEY;
+const accessTokenExpire = process.env.JWT_ACCESS_EXPIRE_IN;
+const refreshTokenExpire = process.env.JWT_REFRESH_EXPIRE_IN;
 require("dotenv").config();
 
 let refreshTokens = [];
@@ -29,6 +31,7 @@ const authController = {
         data: user,
       });
     } catch (error) {
+      console.log("errer register>> ", error);
       res.status(500).json({
         EC: -2,
         data: error,
@@ -38,15 +41,15 @@ const authController = {
 
   //GENERATE ACCESS TOKEN
   generateAccessToken: (user) => {
-    return jwt.sign({ id: user.id, admin: user.admin }, keyAccessToken, {
-      expiresIn: "300d",
+    return jwt.sign({ id: user.id, isAdmin: user.isAdmin }, keyAccessToken, {
+      expiresIn: accessTokenExpire,
     });
   },
 
   //GENERATE REFRESH TOKEN
   generateRefreshToken: (user) => {
-    return jwt.sign({ id: user.id, admin: user.admin }, keyRefreshToken, {
-      expiresIn: "365d",
+    return jwt.sign({ id: user.id, isAdmin: user.isAdmin }, keyRefreshToken, {
+      expiresIn: refreshTokenExpire,
     });
   },
 
@@ -109,24 +112,26 @@ const authController = {
   //REQUEST REFRESH TOKEN
   requestRefreshToken: async (req, res) => {
     //take refresh token from user
+    if (!req.headers.cookie) {
+      return;
+    }
     const refreshToken = req.headers.cookie.split("=")[1];
+    console.log("refreshToken>>> ", refreshToken);
     if (!refreshToken) {
-      return res
-        .status(401)
-        .json({ EC: -2, data: "You are not authenticated" });
+      return res.status(403).json({ EC: -2, data: "Không có refresh token" });
     }
 
     //Kiểm tra trùng lặp refresh token trong kho
-    if (!refreshTokens.includes(refreshToken)) {
-      return res
-        .status(403)
-        .json({ EC: -2, data: "Refresh Token is not valid" });
-    }
+    // if (!refreshTokens.includes(refreshToken)) {
+    //   return res
+    //     .status(403)
+    //     .json({ EC: -2, data: "Refresh Token is not valid" });
+    // }
 
     jwt.verify(refreshToken, keyRefreshToken, (err, user) => {
       console.log("user refresh token>>> ", user);
       if (err) {
-        console.log("error verify refresh token >>>> ", err);
+        console.log("Có lỗi refresh token khi verify>>>> ", err);
       }
 
       //Lọc refresh token cũ ra khỏi db
@@ -148,7 +153,10 @@ const authController = {
 
       res.status(200).json({
         EC: 0,
-        data: { EC: 0, data: newAccessToken, newRefreshToken },
+        data: {
+          accessToken: newAccessToken,
+          refreshToken: newRefreshToken,
+        },
       });
     });
   },
@@ -168,10 +176,12 @@ const authController = {
   //FETCH ACCOUNT
   fetchAccount: async (req, res) => {
     try {
-      const user = await User.findById(req.user.id);
+      const userFullInfor = await User.findById(req.user.id);
+      const { password, ...others } = userFullInfor._doc;
+      const user = { ...others };
       res.status(200).json({
         EC: 0,
-        data: user,
+        data: { user },
       });
     } catch (error) {
       res.status(500).json({

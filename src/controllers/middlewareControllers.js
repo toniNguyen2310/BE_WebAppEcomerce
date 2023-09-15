@@ -12,14 +12,21 @@ const middlewareControllers = {
       //tạo token dùng sign, xác thực dùng verify
       jwt.verify(accessToken, keyAccessToken, (err, user) => {
         if (err) {
-          res.status(403).json({ EC: -2, data: "Token is not valid" });
+          res
+            .status(401)
+            .json({
+              EC: -2,
+              data: "Token đã hết hạn cần Refresh Token hoặc = null",
+            });
+          return;
         }
         req.user = user;
         console.log("user>>> ", user);
         next();
       });
     } else {
-      res.status(401).json({ EC: -2, data: "You are not authenticated" });
+      res.status(401).json({ EC: -2, data: "Không thấy có Token" });
+      return;
     }
   },
 
@@ -27,7 +34,7 @@ const middlewareControllers = {
   verifyTokenAndAdminAuth: (req, res, next) => {
     middlewareControllers.verifyToken(req, res, () => {
       //if => xác nhận id chính chủ hoặc admin thì tiếp tục công việc tiếp theo
-      if (req.user.id == req.params.id || req.user.admin) {
+      if (req.user.id == req.params.id || req.user.isAdmin) {
         next();
       } else {
         res

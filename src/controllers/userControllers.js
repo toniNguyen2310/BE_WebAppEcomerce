@@ -6,7 +6,7 @@ const userController = {
   getAllUsers: async (req, res) => {
     console.log("req.user>>>", req.user);
     try {
-      const user = await User.findOne({ ac });
+      const user = await User.find({});
       res.status(200).json({
         EC: 0,
         data: user,

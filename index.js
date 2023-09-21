@@ -4,7 +4,10 @@ const express = require("express");
 const connection = require("./src/config/database");
 const authRouter = require("./src/routes/auth");
 const userRouter = require("./src/routes/user");
+const productRouter = require("./src/routes/products.routes");
 const cookieParser = require("cookie-parser");
+const categoryRouter = require("./src/routes/categoryRouter");
+// const bookRouter = require("./src/routes/bookRouter");
 const app = express();
 
 //env
@@ -31,6 +34,8 @@ app.get("/", (req, res) => {
 //ROUTES
 app.use("/v1/api/auth", authRouter);
 app.use("/v1/api/user", userRouter);
+app.use("/v1/api/product", productRouter);
+app.use("/v1/api/category", categoryRouter);
 
 //Connect to DB
 (async () => {

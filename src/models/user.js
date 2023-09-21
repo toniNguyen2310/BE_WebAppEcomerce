@@ -1,7 +1,6 @@
-// const { boolean } = require("joi");
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
-mongoose.set("strictQuery", false);
+// mongoose.set("strictQuery", false);
 const userSchema = new mongoose.Schema(
   {
     email: {

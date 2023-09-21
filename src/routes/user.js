@@ -5,14 +5,14 @@ const userRouter = require("express").Router();
 //Get All Users
 userRouter.get(
   "/",
-  middlewareControllers.verifyToken,
+  middlewareControllers.verifyTokenAndAdmin,
   userController.getAllUsers
 );
 
 //Delete User
 userRouter.delete(
   "/:id",
-  middlewareControllers.verifyTokenAndAdminAuth,
+  middlewareControllers.verifyTokenAndAuthorization,
   userController.deleteUser
 );
 

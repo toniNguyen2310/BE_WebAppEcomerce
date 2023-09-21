@@ -83,7 +83,9 @@ const authController = {
       if (user && validatePassword) {
         const accessToken = authController.generateAccessToken(user);
         const refreshToken = authController.generateRefreshToken(user);
+
         refreshTokens.push(refreshToken);
+        console.log("refreshTokens Login>>> ", refreshTokens);
         //Lưu Refresh Token vào cookies
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
@@ -98,7 +100,7 @@ const authController = {
         const userWP = { ...others };
         res.status(200).json({
           EC: 0,
-          data: { userWP, accessToken },
+          data: { userWP, accessToken, refreshToken },
         });
       }
     } catch (error) {
@@ -116,33 +118,39 @@ const authController = {
       return;
     }
     const refreshToken = req.headers.cookie.split("=")[1];
-    console.log("refreshToken>>> ", refreshToken);
-    if (!refreshToken) {
-      return res.status(403).json({ EC: -2, data: "Không có refresh token" });
-    }
 
-    //Kiểm tra trùng lặp refresh token trong kho
-    // if (!refreshTokens.includes(refreshToken)) {
-    //   return res
-    //     .status(403)
-    //     .json({ EC: -2, data: "Refresh Token is not valid" });
-    // }
+    if (!refreshToken) {
+      // return res.status(403).json({ EC: -2, data: "Không có refresh token" });
+      return res.status(401).json({ EC: -2, data: "Không có refresh token" });
+    }
+    // refreshTokens.push(refreshToken);
+    console.log("refreshTokens >>> ", refreshTokens);
 
     jwt.verify(refreshToken, keyRefreshToken, (err, user) => {
       console.log("user refresh token>>> ", user);
       if (err) {
         console.log("Có lỗi refresh token khi verify>>>> ", err);
+        res.clearCookie("refreshToken");
+        return res.status(400).json({ EC: -2, data: "Refresh Token hết hạn" });
       }
-
+      console.log("refreshToken when refresh>>> ", refreshTokens);
+      //Kiểm tra trùng lặp refresh token trong kho
+      // if (!refreshTokens.includes(refreshToken)) {
+      //   console.log("run incluce refresh");
+      //   return res
+      //     .status(400)
+      //     .json({ EC: -2, data: "Refresh Token is not valid" });
+      // }
       //Lọc refresh token cũ ra khỏi db
-      refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
-
+      refreshTokens = refreshTokens.filter((token) => token != refreshToken);
+      console.log("refreshToken after push>>> ", refreshTokens);
       //Create new access token and refresh token
       const newAccessToken = authController.generateAccessToken(user);
       const newRefreshToken = authController.generateRefreshToken(user);
 
       //Thêm token mới vào db
       refreshTokens.push(newRefreshToken);
+      console.log("refreshToken after refresh>>> ", refreshTokens);
 
       res.cookie("refreshToken", newRefreshToken, {
         httpOnly: true,

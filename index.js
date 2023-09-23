@@ -19,7 +19,7 @@ const hostname = process.env.HOST_NAME;
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:5173",
+    origin: "https://lacdau-clone-fe-jpz7v8s8w-toninguyen2310.vercel.app/",
   })
 );
 app.use(cookieParser());

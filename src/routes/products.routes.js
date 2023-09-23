@@ -15,7 +15,7 @@ productRouter.get(
   productControllers.getProductByCategoryName
 );
 
-//GET ALL PRODUCTS
+//GET ALL PRODUCTS PAGINATION
 productRouter.get("/", productControllers.getAllProducts);
 
 //EDIT PRODUCT BY ID
@@ -24,7 +24,7 @@ productRouter.put("/:id", productControllers.editProductById);
 //DELETE PRODUCT BY ID
 productRouter.delete(
   "/:id",
-  // middlewareControllers.verifyTokenAndAuthorization,
+  middlewareControllers.verifyTokenAndAuthorization,
   productControllers.deleteProductById
 );
 

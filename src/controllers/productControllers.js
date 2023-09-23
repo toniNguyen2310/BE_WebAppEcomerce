@@ -122,6 +122,7 @@ const productControllers = {
       const product = await Product.findByIdAndUpdate(
         req.params.id,
         {
+          _id: req.params.id,
           name: req.body.name,
           description: req.body.description,
           price: req.body.price,

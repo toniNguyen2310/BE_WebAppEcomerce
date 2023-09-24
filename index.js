@@ -16,18 +16,18 @@ const port = process.env.PORT;
 const hostname = process.env.HOST_NAME;
 
 // Config
-app.use(
-  cors({
-    credentials: true,
-    origin: "https://lacdau-clone-fe-pj.vercel.app",
-  })
-);
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin: "https://lacdau-clone-fe-pj.vercel.app",
+//   })
+// );
+
+app.use(cors());
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "*");
 //   next();
 // });
-
-// app.use(cors());
 
 // app.all("*", function (req, res, next) {
 //   res.setHeader(
@@ -73,7 +73,6 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
-
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

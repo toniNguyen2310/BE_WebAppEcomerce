@@ -18,7 +18,7 @@ const hostname = process.env.HOST_NAME;
 // Config
 app.use(
   cors({
-    // credentials: true,
+    credentials: true,
     origin: "https://lacdau-clone-fe-pj.vercel.app",
   })
 );

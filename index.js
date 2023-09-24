@@ -16,12 +16,12 @@ const port = process.env.PORT;
 const hostname = process.env.HOST_NAME;
 
 // Config
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin: "https://lacdau-clone-fe-pj.vercel.app/",
-//   })
-// );
+app.use(
+  cors({
+    credentials: true,
+    origin: true,
+  })
+);
 
 // app.use(cors());
 

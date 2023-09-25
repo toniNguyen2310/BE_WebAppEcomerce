@@ -27,7 +27,7 @@ const hostname = process.env.HOST_NAME;
 
 app.use(cors());
 app.all("*", function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "origin, content-type, accept");
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");

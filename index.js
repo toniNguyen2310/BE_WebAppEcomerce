@@ -25,22 +25,25 @@ const hostname = process.env.HOST_NAME;
 //   })
 // );
 
-app.use(cors());
-app.all("/*", function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  // res.header("Access-Control-Allow-Headers", "origin, content-type, accept");
-  // res.header("Access-Control-Allow-Credentials", "true");
-  // res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  // if (req.method == "OPTIONS") {
-  //   res.status(200).end();
-  // }
-
-  next();
-});
+app.use(
+  app.use(function (req, res, next) {
+    const allowedOrgini = ["https://lacdau-clone-fe-pj.vercel.app"];
+    const origin = req.headers.origin;
+    if (allowedOrgini.includes(origin)) {
+      res.setHeader("Access-Control-Allow-Origin", origin);
+    }
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    // if (req.method === "OPTIONS") {
+    //   return res.sendStatus(200);
+    // }
+    // Pass to next layer of middleware
+    next();
+  })
+);
 
 // Add headers before the routes are defined
-// app.use(function (req, res, next) {
+// app.use(app.use(function (req, res, next) {
 //   console.log("req.method>> ", req.method, req.headers);
 //   // Website you wish to allow to connect
 //   res.setHeader("Access-Control-Allow-Origin", "*");

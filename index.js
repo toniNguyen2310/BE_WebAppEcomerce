@@ -16,33 +16,40 @@ const port = process.env.PORT;
 const hostname = process.env.HOST_NAME;
 
 // Config
-// app.use(
-//   cors({
-//     // credentials: true,
-//     origin: "https://lacdau-clone-fe-pj.vercel.app",
-//     // origin: "http://localhost:5174",
-//     optionSuccessStatus: 200,
-//   })
-// );
-
-app.use(function (req, res, next) {
-  const allowedOrgini = ["https://lacdau-clone-fe-pj.vercel.app"];
-  const origin = req.headers.origin;
-  if (allowedOrgini.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  // if (req.method === "OPTIONS") {
-  //   return res.sendStatus(200);
-  // }
-  // Pass to next layer of middleware
+// app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    // origin: "https://lacdau-clone-fe-pj.vercel.app",
+    origin: "http://localhost:5173",
+    optionSuccessStatus: 200,
+  })
+);
+app.use((req, res, next) => {
+  console.log("req.method", req.method);
+  console.log("req.headers", req.headers);
   next();
 });
+// app.use(function (req, res, next) {
+//   const allowedOrgini = ["https://lacdau-clone-fe-pj.vercel.app"];
+//   const origin = req.headers.origin;
+//   if (allowedOrgini.includes(origin)) {
+//     res.setHeader("Access-Control-Allow-Origin", origin);
+//   }
+//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+//   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//   // if (req.method === "OPTIONS") {
+//   //   return res.sendStatus(200);
+//   // }
+//   // Pass to next layer of middleware
+//   next();
+// });
 
 // Add headers before the routes are defined
-// app.use(app.use(function (req, res, next) {
-//   console.log("req.method>> ", req.method, req.headers);
+
+// app.use(function (req, res, next) {
+//   console.log("req.method>> ", req.method);
+//   console.log("req.headers>> ", req.headers);
 //   // Website you wish to allow to connect
 //   res.setHeader("Access-Control-Allow-Origin", "*");
 
@@ -60,7 +67,7 @@ app.use(function (req, res, next) {
 
 //   // Set to true if you need the website to include cookies in the requests sent
 //   // to the API (e.g. in case you use sessions)
-//   // res.setHeader("Access-Control-Allow-Credentials", true);
+//   res.setHeader("Access-Control-Allow-Credentials", true);
 
 //   if (req.method === "OPTIONS") {
 //     return res.sendStatus(200);
@@ -79,6 +86,7 @@ app.use(function (req, res, next) {
 //   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
 //   next();
 // });
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -86,13 +86,14 @@ const authController = {
 
         refreshTokens.push(refreshToken);
         console.log("refreshTokens Login>>> ", refreshTokens);
+
         //Lưu Refresh Token vào cookies
-        res.cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          secure: false,
-          path: "/",
-          sameSite: "strict",
-        });
+        // res.cookie("refreshToken", refreshToken, {
+        //   httpOnly: true,
+        //   secure: false,
+        //   path: "/",
+        //   sameSite: "strict",
+        // });
 
         //Loaị bỏ password khi login
         const { password, ...others } = user._doc;
@@ -112,52 +113,87 @@ const authController = {
   },
 
   //REQUEST REFRESH TOKEN
+  // requestRefreshToken: async (req, res) => {
+  //   //take refresh token from user
+  //   console.log(" req.headers1>> ", req.headers);
+  //   console.log(" req.body>> ", req.body);
+  //   if (req.body.refreshLocal === null) {
+  //     console.log("refreshLocal null");
+  //   }
+  //   if (req.body.refreshLocal != null) {
+  //     console.log("refreshLocal>> ", req.body.refreshLocal);
+  //   }
+  //   if (!req.headers.cookie) {
+  //     console.log("ko co cookies");
+  //     return;
+  //   }
+
+  //   const refreshToken = req.headers.cookie.split("=")[1];
+
+  //   if (!refreshToken) {
+  //     return res.status(401).json({ EC: -2, data: "Không có refresh token" });
+  //   }
+
+  //   jwt.verify(refreshToken, keyRefreshToken, (err, user) => {
+  //     // console.log("user refresh token>>> ", user);
+  //     if (err) {
+  //       res.clearCookie("refreshToken");
+  //       return res.status(400).json({ EC: -2, data: "Refresh Token hết hạn" });
+  //     }
+  //     // console.log("refreshToken when refresh>>> ", refreshTokens);
+  //     //Kiểm tra trùng lặp refresh token trong kho
+  //     // if (!refreshTokens.includes(refreshToken)) {
+  //     //   console.log("run incluce refresh");
+  //     //   return res
+  //     //     .status(400)
+  //     //     .json({ EC: -2, data: "Refresh Token is not valid" });
+  //     // }
+  //     //Lọc refresh token cũ ra khỏi db
+  //     refreshTokens = refreshTokens.filter((token) => token != refreshToken);
+  //     //Create new access token and refresh token
+  //     const newAccessToken = authController.generateAccessToken(user);
+  //     const newRefreshToken = authController.generateRefreshToken(user);
+
+  //     //Thêm token mới vào db
+  //     refreshTokens.push(newRefreshToken);
+  //     // console.log("refreshToken after refresh>>> ", refreshTokens);
+
+  //     res.cookie("refreshToken", newRefreshToken, {
+  //       httpOnly: true,
+  //       secure: false,
+  //       path: "/",
+  //       sameSite: "strict",
+  //     });
+
+  //     res.status(200).json({
+  //       EC: 0,
+  //       data: {
+  //         accessToken: newAccessToken,
+  //         refreshToken: newRefreshToken,
+  //       },
+  //     });
+  //   });
+  // },
+
+  //TEST REFRESH TOKEN
   requestRefreshToken: async (req, res) => {
-    //take refresh token from user
-    if (!req.headers.cookie) {
+    if (req.body.refreshLocal === null) {
+      console.log("refreshLocal null >>> ko co refresh token trong local S");
       return;
     }
-    const refreshToken = req.headers.cookie.split("=")[1];
-
-    if (!refreshToken) {
-      // return res.status(403).json({ EC: -2, data: "Không có refresh token" });
-      return res.status(401).json({ EC: -2, data: "Không có refresh token" });
-    }
-    // refreshTokens.push(refreshToken);
-    console.log("refreshTokens >>> ", refreshTokens);
-
+    const refreshToken = req.body.refreshLocal;
     jwt.verify(refreshToken, keyRefreshToken, (err, user) => {
-      console.log("user refresh token>>> ", user);
       if (err) {
-        console.log("Có lỗi refresh token khi verify>>>> ", err);
-        res.clearCookie("refreshToken");
+        console.log("refresh token het han");
         return res.status(400).json({ EC: -2, data: "Refresh Token hết hạn" });
       }
-      console.log("refreshToken when refresh>>> ", refreshTokens);
-      //Kiểm tra trùng lặp refresh token trong kho
-      // if (!refreshTokens.includes(refreshToken)) {
-      //   console.log("run incluce refresh");
-      //   return res
-      //     .status(400)
-      //     .json({ EC: -2, data: "Refresh Token is not valid" });
-      // }
-      //Lọc refresh token cũ ra khỏi db
       refreshTokens = refreshTokens.filter((token) => token != refreshToken);
-      console.log("refreshToken after push>>> ", refreshTokens);
-      //Create new access token and refresh token
+
+      //create new access and refresh Token
       const newAccessToken = authController.generateAccessToken(user);
       const newRefreshToken = authController.generateRefreshToken(user);
 
-      //Thêm token mới vào db
       refreshTokens.push(newRefreshToken);
-      console.log("refreshToken after refresh>>> ", refreshTokens);
-
-      res.cookie("refreshToken", newRefreshToken, {
-        httpOnly: true,
-        secure: false,
-        path: "/",
-        sameSite: "strict",
-      });
 
       res.status(200).json({
         EC: 0,
@@ -171,10 +207,10 @@ const authController = {
 
   //LOGOUT
   logoutUser: async (req, res) => {
-    refreshTokens = refreshTokens.filter(
-      (token) => token !== req.headers.cookie.split("=")[1]
-    );
-    res.clearCookie("refreshToken");
+    // refreshTokens = refreshTokens.filter(
+    //   (token) => token !== req.headers.cookie.split("=")[1]
+    // );
+    // res.clearCookie("refreshToken");
     return res.status(200).json({
       EC: 0,
       data: { EC: 0, data: "Logout successfully" },

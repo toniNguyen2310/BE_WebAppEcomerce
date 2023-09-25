@@ -5,6 +5,7 @@ const keyAccessToken = process.env.JWT_ACCESS_KEY;
 const middlewareControllers = {
   // Verify token
   verifyToken: (req, res, next) => {
+    // console.log("req.headers verify>> ", req.headers["authorization"]);
     const token = req.headers["authorization"];
     //bearer 1235664 =>accesstoken = 123456
     const accessToken = token.split(" ")[1];
@@ -12,10 +13,6 @@ const middlewareControllers = {
       //tạo token dùng sign, xác thực dùng verify
       jwt.verify(accessToken, keyAccessToken, (err, user) => {
         if (err) {
-          // res.status(401).json({
-          //   EC: -2,
-          //   data: "Token đã hết hạn cần Refresh Token hoặc = null",
-          // });
           res
             .status(401)
             .json("Token đã hết hạn cần Refresh Token hoặc = null");

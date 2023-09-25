@@ -219,6 +219,10 @@ const authController = {
 
   //FETCH ACCOUNT
   fetchAccount: async (req, res) => {
+    res.status(200).json({
+      EC: -2,
+      message: "Test ",
+    });
     try {
       const userFullInfor = await User.findById(req.user.id);
       const { password, ...others } = userFullInfor._doc;

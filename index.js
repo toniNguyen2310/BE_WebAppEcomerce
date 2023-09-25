@@ -19,23 +19,21 @@ const hostname = process.env.HOST_NAME;
 app.use(
   cors({
     credentials: true,
-    // origin: "https://lacdau-clone-fe-pj.vercel.app",
-    origin: true,
+    origin: "https://lacdau-clone-fe-pj.vercel.app",
+    // origin: "http://localhost:5174",
     optionSuccessStatus: 200,
   })
 );
 
-app.all("/*", function (req, res, next) {
-  res.header(
-    "Access-Control-Allow-Origin",
-    "https://lacdau-clone-fe-pj.vercel.app"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,Authorization,content-type"
-  );
-  next();
-});
+// app.all("/*", function (req, res, next) {
+//   console.log("req>>> ", req);
+//   res.header("Access-Control-Allow-Origin", "http://localhost:5174");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "X-Requested-With,Authorization,content-type"
+//   );
+//   next();
+// });
 
 // app.use(cors());
 // app.use((req, res, next) => {

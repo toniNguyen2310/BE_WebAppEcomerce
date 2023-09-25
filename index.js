@@ -105,7 +105,12 @@ app.get("/", (req, res) => {
 });
 
 //ROUTES
-app.use("/v1/api/auth", authRouter);
+app.use("/v1/api/auth/account", (req, res) => {
+  res.send({
+    "req.method>": req.method,
+    "req.headers>": req.headers,
+  });
+});
 app.use("/v1/api/user", userRouter);
 app.use("/v1/api/product", productRouter);
 app.use("/v1/api/category", categoryRouter);

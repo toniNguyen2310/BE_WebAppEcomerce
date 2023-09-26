@@ -180,7 +180,7 @@ const authController = {
     if (req.body.refreshLocal === null) {
       console.log("refreshLocal null >>> ko co refresh token trong local S");
       return res
-        .status(404)
+        .status(200)
         .json({ EC: 1, data: "không có refresh token trong LS" });
     }
     const refreshToken = req.body.refreshLocal;
@@ -197,7 +197,7 @@ const authController = {
 
       refreshTokens.push(newRefreshToken);
 
-      res.status(200).json({
+      res.status(201).json({
         EC: 0,
         data: {
           accessToken: newAccessToken,

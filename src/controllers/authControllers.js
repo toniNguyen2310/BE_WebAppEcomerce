@@ -179,7 +179,9 @@ const authController = {
   requestRefreshToken: async (req, res) => {
     if (req.body.refreshLocal === null) {
       console.log("refreshLocal null >>> ko co refresh token trong local S");
-      return;
+      return res
+        .status(402)
+        .json({ EC: 1, data: "không có refresh token trong LS" });
     }
     const refreshToken = req.body.refreshLocal;
     jwt.verify(refreshToken, keyRefreshToken, (err, user) => {

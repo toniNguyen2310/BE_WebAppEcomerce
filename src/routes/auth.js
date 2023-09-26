@@ -21,7 +21,7 @@ authRouter.post(
 //LOGIN
 authRouter.get(
   "/account",
-  // middlewareControllers.verifyToken,
+  middlewareControllers.verifyToken,
   authController.fetchAccount
 );
 

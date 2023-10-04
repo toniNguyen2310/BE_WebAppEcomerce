@@ -1,4 +1,5 @@
 const Category = require("../models/category");
+const Product = require("../models/product");
 
 const categoryControllers = {
   //CREATE
@@ -35,6 +36,45 @@ const categoryControllers = {
       res.status(500).json({
         errCode: 1,
         message: "have error",
+        error: error,
+      });
+    }
+  },
+
+  //GET PRODUCT CATEGORY SALES TO DISPLAY HOMEPAGE
+  getProductByDiscount: async (req, res) => {
+    try {
+      const products = await Product.find({ discount: { $gt: 0 } }).sort({
+        discount: -1,
+      });
+      console.log("products>>> ", products);
+      if (products.length >= 10) {
+        const productSlice = products.slice(0, 10);
+        console.log("slice discount");
+        return res.status(200).json({
+          errCode: 0,
+          message: "Đã tìm thấy DS sản phẩm",
+          data: productSlice,
+        });
+      } else {
+        const productSlice = products;
+        console.log("ko slice discount");
+        return res.status(200).json({
+          errCode: 0,
+          message: "Đã tìm thấy DS sản phẩm",
+          data: productSlice,
+        });
+      }
+
+      // return res.status(200).json({
+      //   errCode: 0,
+      //   message: "Đã tìm thấy DS sản phẩm",
+      //   data: products,
+      // });
+    } catch (error) {
+      res.status(500).json({
+        errCode: 1,
+        message: "Không tìm thấy sản phẩm",
         error: error,
       });
     }

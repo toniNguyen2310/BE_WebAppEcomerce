@@ -41,9 +41,41 @@ const productControllers = {
     }
   },
 
+  //GET PRODUCT CATEGORY SLICE TO DISPLAY HOMEPAGE
+  getProductByCateSlice: async (req, res) => {
+    try {
+      console.log("req.params", req.params);
+      const categoryName = req.params.category_name;
+      const products = await Product.find({ category: categoryName });
+      if (products.length >= 10) {
+        const productSlice = products.slice(0, 10);
+        console.log("slice");
+        return res.status(200).json({
+          errCode: 0,
+          message: "Đã tìm thấy DS sản phẩm",
+          data: productSlice,
+        });
+      } else {
+        const productSlice = products;
+        console.log("ko slice");
+        return res.status(200).json({
+          errCode: 0,
+          message: "Đã tìm thấy DS sản phẩm",
+          data: productSlice,
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        errCode: 1,
+        message: "Không tìm thấy sản phẩm",
+        error: error,
+      });
+    }
+  },
+
   //GET PRODUCT BY ID
   getProductById: async (req, res) => {
-    console.log("req.params>>>", req.params);
+    console.log("req.params>>>2", req.params);
     try {
       const product = await Product.findById(req.params.id);
       return res.status(200).json({

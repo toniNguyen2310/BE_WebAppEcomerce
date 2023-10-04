@@ -15,6 +15,14 @@ productRouter.get(
   productControllers.getProductByCategoryName
 );
 
+//GET PRODUCT BY CATEGORY SLICE 10
+productRouter.get(
+  "/category-slice/:category_name",
+  productControllers.getProductByCateSlice
+);
+
+//GET PRODUCT BY SALE
+
 //GET ALL PRODUCTS PAGINATION
 productRouter.get("/", productControllers.getAllProducts);
 

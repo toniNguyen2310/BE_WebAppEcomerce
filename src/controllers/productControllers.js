@@ -4,9 +4,25 @@ const productService = require("../services/productService");
 const productControllers = {
   //CREATE NEW PRODUCT
   createProduct: async (req, res) => {
-    console.log("req>>>", req.body);
     try {
-      const newProduct = req.body;
+      const priceDefaul = await req.body.price;
+      const priceAfter = await (
+        parseInt(req.body.price) *
+        ((100 - parseInt(req.body.discount)) / 100)
+      ).toFixed(0);
+      console.log("req.body>>> ", req.body);
+      console.log("price>>> ", priceDefaul, req.body.discount, priceAfter);
+      const newProduct = {
+        name: req.body.name,
+        description: req.body.description,
+        priceDefaul: priceDefaul,
+        discount: req.body.discount,
+        priceAfter: priceAfter,
+        images: req.body.images,
+        brand: req.body.brand,
+        category: req.body.category,
+        inventory: req.body.inventory,
+      };
       const createProduct = await Product.create(newProduct);
       console.log("createProduct>>> ", createProduct);
       return res.status(200).json({
@@ -119,14 +135,19 @@ const productControllers = {
   editProductById: async (req, res) => {
     console.log("req>>>", req.params);
     try {
+      console.log("req.body>>> ", req.body);
       const product = await Product.findByIdAndUpdate(
         req.params.id,
         {
           _id: req.params.id,
           name: req.body.name,
           description: req.body.description,
-          price: req.body.price,
-          discout: req.body.discout,
+          priceDefaul: req.body.price,
+          discount: req.body.discount,
+          priceAfter: (
+            parseInt(req.body.price) *
+            ((100 - parseInt(req.body.discount)) / 100)
+          ).toFixed(0),
           images: req.body.images,
           brand: req.body.brand,
           category: req.body.category,
@@ -134,6 +155,7 @@ const productControllers = {
         },
         { new: true }
       );
+      console.log("product>> ", product);
       return res.status(200).json({
         errCode: 0,
         message: "Sản phẩm đã được cập nhật",

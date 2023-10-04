@@ -5,17 +5,17 @@ const productControllers = {
   //CREATE NEW PRODUCT
   createProduct: async (req, res) => {
     try {
-      const priceDefaul = await req.body.price;
-      const priceAfter = await (
+      const price = req.body.price;
+      const priceAfter = (
         parseInt(req.body.price) *
         ((100 - parseInt(req.body.discount)) / 100)
       ).toFixed(0);
-      console.log("req.body>>> ", req.body);
-      console.log("price>>> ", priceDefaul, req.body.discount, priceAfter);
+      console.log("price>>> ", price, req.body.discount, priceAfter);
+
       const newProduct = {
         name: req.body.name,
         description: req.body.description,
-        priceDefaul: priceDefaul,
+        price: price,
         discount: req.body.discount,
         priceAfter: priceAfter,
         images: req.body.images,
@@ -23,6 +23,8 @@ const productControllers = {
         category: req.body.category,
         inventory: req.body.inventory,
       };
+      console.log("newProduct>>> ", newProduct);
+
       const createProduct = await Product.create(newProduct);
       console.log("createProduct>>> ", createProduct);
       return res.status(200).json({
@@ -142,7 +144,7 @@ const productControllers = {
           _id: req.params.id,
           name: req.body.name,
           description: req.body.description,
-          priceDefaul: req.body.price,
+          price: req.body.price,
           discount: req.body.discount,
           priceAfter: (
             parseInt(req.body.price) *

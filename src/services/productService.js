@@ -14,18 +14,31 @@ const productService = {
   },
 
   //GET ALL PRODUCTS
-  getAllProductsService: async (limit, page, name, category, brand) => {
+  getAllProductsService: async (
+    limit,
+    page,
+    name,
+    category,
+    brand,
+    sort,
+    filterPrice
+  ) => {
     let offset = (page - 1) * limit;
-
+    console.log("=>>> ", name, category, brand, sort, filterPrice);
     const products = await Product.find({
-      $and: [name, category, brand],
+      $and: [name, category, brand, filterPrice],
+
       // $or: [{ name: name }, { category: category }],
     })
+      // .sort({ priceAfter: -1 })
+      .sort(sort)
       .skip(offset)
       .limit(limit)
       .exec();
     console.log("products>>> ", products);
-    const count = await Product.find({ $and: [name, category, brand] }).count();
+    const count = await Product.find({
+      $and: [name, category, brand, filterPrice],
+    }).count();
     console.log("count>> ", count);
     return { products, count };
   },

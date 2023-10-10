@@ -123,6 +123,7 @@ const productControllers = {
   //GET ALL PRODUCT
   getAllProducts: async (req, res) => {
     try {
+      console.log("req>> ", req.query);
       const limit = req.query.pageSize;
       const page = req.query.current ? req.query.current : 1;
       // const name = req.query.name ? { name: req.query.name } : {};
@@ -145,12 +146,48 @@ const productControllers = {
           : { brand: { $regex: req.query.brand, $options: "i" } }
         : {};
 
+      const sort = req.query.priceAfter
+        ? { priceAfter: req.query.priceAfter }
+        : req.query.updatedAt
+        ? { updatedAt: req.query.updatedAt }
+        : {};
+      console.log("sort>>> ", sort);
+
+      const filterPrice =
+        req.query.filterPrice === "op1"
+          ? {
+              $expr: { $lte: [{ $toDouble: "$priceAfter" }, 100000] },
+            }
+          : req.query.filterPrice === "op12"
+          ? {
+              $and: [
+                // GT FIRST
+                { $expr: { $gte: [{ $toDouble: "$priceAfter" }, 100000] } },
+                // LT LAST
+                { $expr: { $lte: [{ $toDouble: "$priceAfter" }, 200000] } },
+              ],
+            }
+          : req.query.filterPrice === "op25"
+          ? {
+              $and: [
+                // GT FIRST
+                { $expr: { $gte: [{ $toDouble: "$priceAfter" }, 200000] } },
+                // LT LAST
+                { $expr: { $lte: [{ $toDouble: "$priceAfter" }, 500000] } },
+              ],
+            }
+          : {};
+
+      // {req.query.filterPrice==="op1"?const filterPrice={filterPrice:{$lt:100000}} :req.query.filterPrice==="op12"?const filterPrice={filterPrice:{$gt:100000,$lt:200000}}:req.query.filterPrice==="op25"?const filterPrice={filterPrice:{$gt:200000,$lt:500000}}:{}}
+
       const { products, count } = await productService.getAllProductsService(
         limit,
         page,
         name,
         category,
-        brand
+        brand,
+        sort,
+        filterPrice
       );
       return res.status(200).json({
         errCode: 0,

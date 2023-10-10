@@ -178,8 +178,6 @@ const productControllers = {
             }
           : {};
 
-      // {req.query.filterPrice==="op1"?const filterPrice={filterPrice:{$lt:100000}} :req.query.filterPrice==="op12"?const filterPrice={filterPrice:{$gt:100000,$lt:200000}}:req.query.filterPrice==="op25"?const filterPrice={filterPrice:{$gt:200000,$lt:500000}}:{}}
-
       const { products, count } = await productService.getAllProductsService(
         limit,
         page,

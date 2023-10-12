@@ -29,7 +29,7 @@ const categoryControllers = {
       console.log("body category>> ", req.body);
       const categoryName = req.body.category;
       const category = await Category.find({ value: categoryName });
-      console.log("category>>", category);
+      console.log("category??>>", category);
       return res.status(200).json({
         errCode: 0,
         message: "take date category successful!!!!",

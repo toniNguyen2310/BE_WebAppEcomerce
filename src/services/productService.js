@@ -27,14 +27,16 @@ const productService = {
     console.log("=>>> ", name, category, brand, sort, filterPrice);
     const products = await Product.find({
       $and: [name, category, brand, filterPrice],
-
+      // $and: [{}, {}, {}, {}],
       // $or: [{ name: name }, { category: category }],
     })
-      // .sort({ priceAfter: -1 })
+      // .sort({ priceAfter: 1 })
       .sort(sort)
+      .collation({ locale: "en_US", numericOrdering: true })
+
       .skip(offset)
-      .limit(limit)
-      .exec();
+      .limit(limit);
+    // .exec();
     console.log("products>>> ", products);
     const count = await Product.find({
       $and: [name, category, brand, filterPrice],

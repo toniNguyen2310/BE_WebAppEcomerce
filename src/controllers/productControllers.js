@@ -154,7 +154,7 @@ const productControllers = {
       console.log("sort>>> ", sort);
 
       const filterPrice =
-        req.query.filterPrice === "op1"
+        req.query.filterPrice === "op01"
           ? {
               $expr: { $lte: [{ $toDouble: "$priceAfter" }, 100000] },
             }
@@ -176,8 +176,11 @@ const productControllers = {
                 { $expr: { $lte: [{ $toDouble: "$priceAfter" }, 500000] } },
               ],
             }
+          : req.query.filterPrice === "op50"
+          ? {
+              $expr: { $gte: [{ $toDouble: "$priceAfter" }, 500000] },
+            }
           : {};
-
       const { products, count } = await productService.getAllProductsService(
         limit,
         page,

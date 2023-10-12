@@ -5,13 +5,14 @@ mongoose.set("strictQuery", false);
 const categorySchema = new mongoose.Schema(
   {
     name: { type: String, require: true, unique: true },
-    description: { type: String, require: true },
-    image: { type: String, require: true },
-    product: [{ type: mongoose.Schema.Types.ObjectId, ref: "product" }],
+    value: { type: String, require: true, unique: true },
+    // description: { type: String, require: true },
+    // image: { type: String, require: true },
+    brand: [{ type: String }],
   },
   { timestamps: true }
 );
 
-categorySchema.plugin(uniqueValidator);
+// categorySchema.plugin(uniqueValidator);
 const Category = mongoose.model("category", categorySchema);
 module.exports = Category;

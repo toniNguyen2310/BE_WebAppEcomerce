@@ -15,17 +15,20 @@ const categoryControllers = {
         data: createCategory,
       });
     } catch (error) {
+      console.log("error>> ", error);
       res.status(500).json({
         errCode: 1,
         message: "Danh mục đã tồn tại",
-        error: error.errors,
+        error: error,
       });
     }
   },
   //FETCH ALL
   fetchAllCategory: async (req, res) => {
     try {
-      const category = await Category.find({}).populate("product");
+      console.log("body category>> ", req.body);
+      const categoryName = req.body.category;
+      const category = await Category.find({ value: categoryName });
       console.log("category>>", category);
       return res.status(200).json({
         errCode: 0,

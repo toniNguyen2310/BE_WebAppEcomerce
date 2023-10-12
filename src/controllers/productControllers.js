@@ -36,7 +36,7 @@ const productControllers = {
       res.status(500).json({
         errCode: 1,
         message: "Sản phẩm đã tồn tại",
-        error: error.errors,
+        error: error,
       });
     }
   },

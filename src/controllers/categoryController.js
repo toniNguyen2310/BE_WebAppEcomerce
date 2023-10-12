@@ -26,14 +26,14 @@ const categoryControllers = {
   //FETCH ALL
   fetchAllCategory: async (req, res) => {
     try {
-      console.log("body category>> ", req.body);
-      const categoryName = req.body.category;
+      console.log("body category>> ", req.query);
+      const categoryName = req.query.value;
       const category = await Category.find({ value: categoryName });
       console.log("category??>>", category);
       return res.status(200).json({
         errCode: 0,
         message: "take date category successful!!!!",
-        data: category,
+        data: category[0],
       });
     } catch (error) {
       res.status(500).json({

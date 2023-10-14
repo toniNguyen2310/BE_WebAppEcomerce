@@ -6,8 +6,6 @@ const categorySchema = new mongoose.Schema(
   {
     name: { type: String, require: true, unique: true },
     value: { type: String, require: true, unique: true },
-    // description: { type: String, require: true },
-    // image: { type: String, require: true },
     brand: [{ type: String }],
   },
   { timestamps: true }

@@ -13,7 +13,7 @@ const userController = {
       });
     } catch (error) {
       res.status(500).json({
-        EC: -2,
+        EC: 1,
         data: error,
       });
     }
@@ -29,7 +29,7 @@ const userController = {
       });
     } catch (error) {
       res.status(500).json({
-        EC: -2,
+        EC: 1,
         data: error,
       });
     }

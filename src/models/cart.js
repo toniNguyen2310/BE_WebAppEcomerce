@@ -3,18 +3,19 @@ const uniqueValidator = require("mongoose-unique-validator");
 
 const cartSchema = new mongoose.Schema(
   {
-    user: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    products: [
+    listCart: [
       {
         productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
-        quantity: { type: Number, default: 1 },
+        quantity: { type: Number, default: 0 },
+        price: { type: Number, default: 0 },
       },
     ],
-    total: { type: Number, default: 0 },
+    totalQty: { type: Number, default: 0, require: true },
+    totalCost: { type: Number, default: 0, require: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );
 
-cartSchema.plugin(uniqueValidator);
 const Cart = mongoose.model("cart", cartSchema);
 module.exports = Cart;

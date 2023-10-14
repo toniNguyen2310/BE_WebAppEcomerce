@@ -28,13 +28,22 @@ const categoryControllers = {
     try {
       console.log("body category>> ", req.query);
       const categoryName = req.query.value;
-      const category = await Category.find({ value: categoryName });
+      const category = await Category.findOne({ value: categoryName });
       console.log("category??>>", category);
-      return res.status(200).json({
-        errCode: 0,
-        message: "take date category successful!!!!",
-        data: category[0],
-      });
+      if (!category) {
+        res.status(404).json({
+          errCode: 1,
+          message: "NOT FOUND CATEGORY",
+          error: error,
+        });
+        return;
+      } else {
+        return res.status(200).json({
+          errCode: 0,
+          message: "take date category successful!!!!",
+          data: category,
+        });
+      }
     } catch (error) {
       res.status(500).json({
         errCode: 1,

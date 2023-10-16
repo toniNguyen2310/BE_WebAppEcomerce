@@ -6,12 +6,15 @@ const cartController = require("../controllers/cartControllers");
 cartRouter.get("/", cartController.displayCart);
 
 //CREATE + ADD + INCREASE => CART
-cartRouter.get("/increase", cartController.addToCart);
+cartRouter.post("/increase", cartController.addToCart);
 
 //REDUCE CART
 cartRouter.get("/decrease", cartController.reduceToCart);
 
 //REMOVE ALL
 cartRouter.get("/removeSigle", cartController.removeSigle);
+
+//EDIT CART
+cartRouter.post("/edit/:id", cartController.editCart);
 
 module.exports = cartRouter;

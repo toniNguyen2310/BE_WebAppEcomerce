@@ -4,7 +4,6 @@ const express = require("express");
 const connection = require("./src/config/database");
 const authRouter = require("./src/routes/auth");
 const userRouter = require("./src/routes/user");
-const cartRouter = require("./src/routes/cart");
 const productRouter = require("./src/routes/products.routes");
 const cookieParser = require("cookie-parser");
 const categoryRouter = require("./src/routes/categoryRouter");
@@ -29,7 +28,6 @@ app.get("/", (req, res) => {
 
 app.use("/v1/api/auth", authRouter);
 app.use("/v1/api/user", userRouter);
-app.use("/v1/api/cart", cartRouter);
 app.use("/v1/api/product", productRouter);
 app.use("/v1/api/category", categoryRouter);
 

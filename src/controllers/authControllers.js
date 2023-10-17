@@ -226,8 +226,14 @@ const authController = {
     //   message: "Test ",
     // });
     try {
-      const userFullInfor = await User.findById(req.user.id);
-      const { password, ...others } = userFullInfor._doc;
+      const userFullInfor = await User.findById(req.user.id).populate({
+        path: "listCart",
+        populate: {
+          path: "productId",
+          model: "product",
+        },
+      });
+      const { password, listCart, ...others } = userFullInfor._doc;
       const user = { ...others };
       res.status(200).json({
         EC: 0,

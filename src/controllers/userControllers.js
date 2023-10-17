@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const bcrypt = require("bcrypt");
+const userService = require("../services/userService");
 
 const userController = {
   //GET ALL USERS
@@ -31,6 +31,49 @@ const userController = {
       res.status(500).json({
         EC: 1,
         data: error,
+      });
+    }
+  },
+
+  //ADD PRODUCT
+  adjustCart: async (req, res) => {
+    console.log("params>> ", req.params);
+    console.log("body>> ", req.body);
+
+    try {
+      const idUser = req.params.id;
+      const dataCart = req.body;
+      const data = await userService.adjustCartService(idUser, dataCart);
+      res.status(200).json({
+        EC: 0,
+        message: "addjust cart success!",
+        data: data,
+      });
+    } catch (error) {
+      res.status(500).json({
+        EC: 1,
+        message: "Something wrong when you handle cart",
+        error: error,
+      });
+    }
+  },
+
+  //FETCH CART BY ID USER
+  fetchCartByIdUser: async (req, res) => {
+    console.log("req.body>> ", req.params);
+    const idUser = req.params.id;
+    try {
+      const data = await userService.fetchCartByIdUserService(idUser);
+      res.status(200).json({
+        EC: 0,
+        message: "Display cart success!!",
+        data: data,
+      });
+    } catch (error) {
+      res.status(500).json({
+        EC: 1,
+        message: "Something wrong when display cart",
+        error: error,
       });
     }
   },

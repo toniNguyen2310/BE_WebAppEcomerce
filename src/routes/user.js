@@ -16,4 +16,10 @@ userRouter.delete(
   userController.deleteUser
 );
 
+//Add product to cart
+userRouter.post("/add/:id", userController.adjustCart);
+
+//FETCH CART FROM ID
+userRouter.get("/cart/:id", userController.fetchCartByIdUser);
+
 module.exports = userRouter;

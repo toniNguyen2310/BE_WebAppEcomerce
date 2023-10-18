@@ -8,7 +8,7 @@ const orderSchema = new mongoose.Schema(
     email: { type: String, required: true },
     phone: { type: Number, required: true },
     address: { type: String, required: true },
-    status: { type: String, required: true },
+    status: { type: String, required: true, default: "pending" },
     payment: { type: String, required: true },
     cart: {
       listCart: [
@@ -18,7 +18,6 @@ const orderSchema = new mongoose.Schema(
           price: { type: Number, default: 0 },
         },
       ],
-      totalQty: { type: Number, default: 0, require: true },
       totalCost: { type: Number, default: 0, require: true },
     },
   },

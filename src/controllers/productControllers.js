@@ -260,6 +260,61 @@ const productControllers = {
       });
     }
   },
+
+  //SEARCH RPRODUCT NAVBAR
+  searchProductNavbar: async (req, res) => {
+    function stringToSlug(str) {
+      // remove accents
+      var from =
+          "àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ",
+        to =
+          "aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy";
+      for (var i = 0, l = from.length; i < l; i++) {
+        str = str.replace(RegExp(from[i], "gi"), to[i]);
+      }
+
+      str = str
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\-]/g, "-")
+        .replace(/-+/g, "-");
+
+      return str;
+    }
+    const search = req.query.value;
+    console.log("search>> ", search);
+    try {
+      // const products = await Product.find({
+      //   name: { $regex: "^" + search, $options: "i" },
+      // }).limit(4);
+
+      const products = await Product.find();
+
+      let list = products.filter((e) =>
+        stringToSlug(e.name).includes(stringToSlug(search))
+      );
+      list = list.slice(0, 5);
+      console.log("list>> ", list);
+      if (list.length === 0) {
+        return res.status(200).json({
+          errCode: 0,
+          message: "KHÔNG CÓ SẢN PHẨM",
+        });
+      } else {
+        return res.status(200).json({
+          errCode: 0,
+          message: "Đã tìm thấy danh mục sản phẩm",
+          data: list,
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        errCode: 1,
+        message: "Không tìm thấy danh mục sản phẩm",
+        error: error,
+      });
+    }
+  },
 };
 
 module.exports = productControllers;

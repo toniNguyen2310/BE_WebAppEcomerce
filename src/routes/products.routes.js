@@ -36,4 +36,7 @@ productRouter.delete(
   productControllers.deleteProductById
 );
 
+//SEARCH NAVBAR
+productRouter.get("/search/navbar", productControllers.searchProductNavbar);
+
 module.exports = productRouter;

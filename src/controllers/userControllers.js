@@ -77,6 +77,28 @@ const userController = {
       });
     }
   },
+
+  //UPDATE USER
+  updateInforUser: async (req, res) => {
+    console.log("params>> ", req.params);
+    console.log("body>> ", req.body);
+
+    try {
+      const idUser = req.params.id;
+      const dataUpdate = req.body;
+      const data = await userService.updateInforUserService(idUser, dataUpdate);
+
+      res.status(200).json({
+        EC: 0,
+        data: data,
+      });
+    } catch (error) {
+      res.status(500).json({
+        EC: 1,
+        data: error,
+      });
+    }
+  },
 };
 
 module.exports = userController;

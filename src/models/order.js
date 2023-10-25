@@ -3,23 +3,23 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      // required: true,
+    },
     name: { type: String, required: true },
     email: { type: String, required: true },
-    phone: { type: Number, required: true },
+    phone: { type: String, required: true },
     address: { type: String, required: true },
-    status: { type: String, required: true, default: "pending" },
-    payment: { type: String, required: true },
-    cart: {
-      listCart: [
-        {
-          productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
-          quantity: { type: Number, default: 0 },
-          price: { type: Number, default: 0 },
-        },
-      ],
-      totalCost: { type: Number, default: 0, require: true },
-    },
+    note: { type: String },
+    status: { type: String, required: true, default: "Chờ xác nhận" },
+    listCart: [
+      {
+        productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+        quantity: { type: Number, default: 0 },
+      },
+    ],
   },
   { timestamps: true }
 );

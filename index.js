@@ -4,6 +4,7 @@ const express = require("express");
 const connection = require("./src/config/database");
 const authRouter = require("./src/routes/auth");
 const userRouter = require("./src/routes/user");
+const orderRouter = require("./src/routes/order");
 const productRouter = require("./src/routes/products.routes");
 const cookieParser = require("cookie-parser");
 const categoryRouter = require("./src/routes/categoryRouter");
@@ -30,6 +31,7 @@ app.use("/v1/api/auth", authRouter);
 app.use("/v1/api/user", userRouter);
 app.use("/v1/api/product", productRouter);
 app.use("/v1/api/category", categoryRouter);
+app.use("/v1/api/order", orderRouter);
 
 // Connect to DB
 (async () => {

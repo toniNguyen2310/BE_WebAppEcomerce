@@ -32,6 +32,20 @@ const userService = {
     });
     return user_cart.listCart;
   },
+
+  //UPDATE USER INFOR
+  updateInforUserService: async (idUser, dataUpdate) => {
+    let user = await User.findById(idUser);
+    console.log("user1>>> ", user);
+    if (user) {
+      user.username = dataUpdate.username;
+      user.phone = dataUpdate.phone;
+      user.birthday = dataUpdate.birthday;
+      user.address = dataUpdate.address;
+      let new_user = await user.save();
+      return new_user;
+    }
+  },
 };
 
 module.exports = userService;

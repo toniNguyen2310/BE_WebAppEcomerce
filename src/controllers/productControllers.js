@@ -293,7 +293,7 @@ const productControllers = {
       let list = products.filter((e) =>
         stringToSlug(e.name).includes(stringToSlug(search))
       );
-      list = list.slice(0, 5);
+      list = list.slice(0, 4);
       console.log("list>> ", list);
       if (list.length === 0) {
         return res.status(200).json({

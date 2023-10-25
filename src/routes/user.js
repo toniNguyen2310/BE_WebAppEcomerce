@@ -22,4 +22,7 @@ userRouter.post("/add/:id", userController.adjustCart);
 //FETCH CART FROM ID
 userRouter.get("/cart/:id", userController.fetchCartByIdUser);
 
+//PUT PRODUCT
+userRouter.put("/:id", userController.updateInforUser);
+
 module.exports = userRouter;

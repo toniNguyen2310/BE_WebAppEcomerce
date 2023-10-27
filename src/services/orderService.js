@@ -15,6 +15,20 @@ const orderService = {
     return listOrder;
   },
 
+  //GET PHONE NUMBER
+  getOrderByPhoneService: async (number) => {
+    console.log(number);
+    let listOrder = await Order.find({ phone: number }).populate({
+      path: "listCart",
+      populate: {
+        path: "productId",
+        model: "product",
+      },
+    });
+    // console.log("listOrder>> ", listOrder);
+    return listOrder;
+  },
+
   editStatusOrderService: async (idOrder) => {
     let order = await Order.findById(idOrder);
     console.log("order>>> ", order);

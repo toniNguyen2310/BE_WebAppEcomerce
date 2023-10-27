@@ -50,6 +50,24 @@ const orderController = {
     }
   },
 
+  //GET ORDER BY PHONE
+  getOrderByPhone: async (req, res) => {
+    console.log("req.user>>>", req.params);
+    try {
+      const phone = req.params.number;
+      const order = await orderService.getOrderByPhoneService(phone);
+      res.status(200).json({
+        EC: 0,
+        data: order,
+      });
+    } catch (error) {
+      res.status(500).json({
+        EC: 1,
+        data: error,
+      });
+    }
+  },
+
   //EDIT ORDER
   editStatusOrder: async (req, res) => {
     try {

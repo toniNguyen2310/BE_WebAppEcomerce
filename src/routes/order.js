@@ -10,4 +10,7 @@ orderRouter.get("/:id", orderController.getOrderByUser);
 //EDIT STATUS ORDER
 orderRouter.put("/edit/:id", orderController.editStatusOrder);
 
+//GET ORDER BY PHONE
+orderRouter.get("/phone/:number", orderController.getOrderByPhone);
+
 module.exports = orderRouter;

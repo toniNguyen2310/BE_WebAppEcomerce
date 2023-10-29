@@ -4,13 +4,16 @@ const orderService = {
   //FETCH CART BY USER ID
   getOrderByUserService: async (idUser) => {
     console.log(idUser);
-    let listOrder = await Order.find({ userId: idUser }).populate({
-      path: "listCart",
-      populate: {
-        path: "productId",
-        model: "product",
-      },
-    });
+    let listOrder = await Order.find({ userId: idUser })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "listCart",
+        populate: {
+          path: "productId",
+          model: "product",
+        },
+      })
+      .exec();
     // console.log("listOrder>> ", listOrder);
     return listOrder;
   },

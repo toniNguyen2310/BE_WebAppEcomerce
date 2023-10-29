@@ -33,7 +33,6 @@ const productService = {
       // .sort({ priceAfter: 1 })
       .sort(sort)
       .collation({ locale: "en_US", numericOrdering: true })
-
       .skip(offset)
       .limit(limit);
     // .exec();
